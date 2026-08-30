@@ -22,11 +22,11 @@
 
 ## Supported models
 
-| Model | Notes |
-|-------|-------|
+| Model                      | Notes                              |
+| -------------------------- | ---------------------------------- |
 | `qwen-image-2.0` (default) | fast general-purpose text-to-image |
-| `qwen-image-3.0` | newer Qwen-Image generation |
-| `wan2.7-image` | Wan (Tongyi Wanxiang) image models |
+| `qwen-image-3.0`           | newer Qwen-Image generation        |
+| `wan2.7-image`             | Wan (Tongyi Wanxiang) image models |
 
 ## Prerequisites
 
@@ -65,14 +65,14 @@ npm run build   # tsc → dist/ (js + d.ts)
 
 ## Usage
 
-Just ask your agent: *"generate an image of a lighthouse at dusk"* — it will call the tool:
+Just ask your agent: _"generate an image of a lighthouse at dusk"_ — it will call the tool:
 
-| Arg | Default | Description |
-|-----|---------|-------------|
-| `prompt` | required | image description |
-| `model` | `qwen-image-2.0` | any DashScope text-to-image model |
-| `size` | `1024*1024` | `W*H` with a star, e.g. `1280*720` |
-| `output_path` | auto | absolute path; default `<config>/gen-images/gen-<ts>.png` |
+| Arg           | Default          | Description                                               |
+| ------------- | ---------------- | --------------------------------------------------------- |
+| `prompt`      | required         | image description                                         |
+| `model`       | `qwen-image-2.0` | any DashScope text-to-image model                         |
+| `size`        | `1024*1024`      | `W*H` with a star, e.g. `1280*720`                        |
+| `output_path` | auto             | absolute path; default `<config>/gen-images/gen-<ts>.png` |
 
 Output directory override: `DASHSCOPE_IMAGEGEN_DIR` env.
 
