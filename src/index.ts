@@ -127,7 +127,19 @@ const DashscopeImagegenPlugin: Plugin = async () => {
           }
 
           writeFileSync(outPath, buf);
-          return `Image generated and saved to: ${outPath}`;
+          const dataUrl = `data:image/png;base64,${buf.toString("base64")}`;
+          return {
+            title: "Generated image",
+            output: `Image generated and saved to: ${outPath}`,
+            attachments: [
+              {
+                type: "file",
+                mime: "image/png",
+                url: dataUrl,
+                filename: outPath.split(/[\\/]/).pop(),
+              },
+            ],
+          };
         },
       }),
     },
