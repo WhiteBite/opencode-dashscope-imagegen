@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/WhiteBite/opencode-dashscope-imagegen/compare/v0.1.2...v0.1.3) (2026-08-30)
+
+
+### Bug Fixes
+
+* make absolute-path test platform-independent ([cb4348b](https://github.com/WhiteBite/opencode-dashscope-imagegen/commit/cb4348b30a43aa5703526c94f2597f24dd02f462))
+
 ## [0.1.2](https://github.com/WhiteBite/opencode-dashscope-imagegen/compare/v0.1.1...v0.1.2) (2026-08-30)
 
 ### ♻️ Refactors
