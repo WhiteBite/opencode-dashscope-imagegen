@@ -42,7 +42,8 @@ describe('computeOutputPath', () => {
   });
 
   it('keeps an explicit absolute path', () => {
-    expect(computeOutputPath('C:\\out\\x.png', '/tmp/gen', 'ts')).toBe('C:\\out\\x.png');
+    const abs = process.platform === 'win32' ? 'C:\\out\\x.png' : '/out/x.png';
+    expect(computeOutputPath(abs, '/tmp/gen', 'ts')).toBe(abs);
   });
 
   it('rejects relative paths', () => {
