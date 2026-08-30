@@ -3,9 +3,12 @@ import { tool } from "@opencode-ai/plugin";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join, isAbsolute, dirname } from "node:path";
 
+const LOG = "[dashscope-imagegen]";
 const ENDPOINT =
   "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation";
 const DEFAULT_MODEL = "qwen-image-2.0";
+
+console.log(`${LOG} plugin module loaded (pid=${process.pid}, platform=${process.platform})`);
 
 function configDir(): string {
   return (
@@ -40,8 +43,7 @@ function resolveApiKey(): string {
 
 function outputDir(): string {
   return (
-    process.env.DASHSCOPE_IMAGEGEN_DIR ??
-    join(configDir(), "gen-images")
+    process.env.DASHSCOPE_IMAGEGEN_DIR ?? join(configDir(), "gen-images")
   );
 }
 
@@ -81,12 +83,60 @@ async function generateImageUrl(
   return url;
 }
 
+interface GenArgs {
+  prompt: string;
+  model?: string;
+  size?: string;
+  output_path?: string;
+}
+
+async function runGenerate(args: GenArgs) {
+  const apiKey = resolveApiKey();
+  const model = args.model ?? DEFAULT_MODEL;
+  const size = args.size ?? "1024*1024";
+
+  const url = await generateImageUrl(apiKey, model, args.prompt, size);
+  const imgRes = await fetch(url);
+  if (!imgRes.ok) {
+    throw new Error(`Image download failed: ${imgRes.status}`);
+  }
+  const buf = Buffer.from(await imgRes.arrayBuffer());
+
+  let outPath = args.output_path;
+  if (!outPath) {
+    const dir = outputDir();
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.]/g, "-");
+    outPath = join(dir, `gen-${ts}.png`);
+  } else if (!isAbsolute(outPath)) {
+    throw new Error("output_path must be an absolute path");
+  } else if (!existsSync(dirname(outPath))) {
+    mkdirSync(dirname(outPath), { recursive: true });
+  }
+
+  writeFileSync(outPath, buf);
+  const dataUrl = `data:image/png;base64,${buf.toString("base64")}`;
+  return {
+    title: "Generated image",
+    output: `Image generated and saved to: ${outPath}`,
+    attachments: [
+      {
+        type: "file" as const,
+        mime: "image/png",
+        url: dataUrl,
+        filename: outPath.split(/[\\/]/).pop(),
+      },
+    ],
+  };
+}
+
 const DashscopeImagegenPlugin: Plugin = async () => {
+  console.log(`${LOG} plugin() invoked, registering image_generate tool`);
   return {
     tool: {
       image_generate: tool({
         description:
-          "Generate an image from a text prompt via Alibaba DashScope (qwen-image-2.0 / qwen-image-3.0 / wan2.7-image). Saves PNG to disk and returns the absolute file path.",
+          "Generate an image from a text prompt via Alibaba DashScope (qwen-image-2.0 / qwen-image-3.0 / wan2.7-image). Saves PNG to disk and returns the absolute file path plus an image attachment.",
         args: {
           prompt: tool.schema.string().describe("Image description"),
           model: tool.schema
@@ -103,43 +153,15 @@ const DashscopeImagegenPlugin: Plugin = async () => {
             .describe("Absolute output file path (default: auto-named in gen-images dir)"),
         },
         async execute(args) {
-          const apiKey = resolveApiKey();
-          const model = args.model ?? DEFAULT_MODEL;
-          const size = args.size ?? "1024*1024";
-
-          const url = await generateImageUrl(apiKey, model, args.prompt, size);
-          const imgRes = await fetch(url);
-          if (!imgRes.ok) {
-            throw new Error(`Image download failed: ${imgRes.status}`);
+          console.log(
+            `${LOG} execute: prompt="${args.prompt.slice(0, 80)}" model=${args.model ?? DEFAULT_MODEL} size=${args.size ?? "1024*1024"}`,
+          );
+          try {
+            return await runGenerate(args);
+          } catch (e) {
+            console.error(`${LOG} execute failed:`, e);
+            throw e;
           }
-          const buf = Buffer.from(await imgRes.arrayBuffer());
-
-          let outPath = args.output_path;
-          if (!outPath) {
-            const dir = outputDir();
-            if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-            const ts = new Date().toISOString().replace(/[:.]/g, "-");
-            outPath = join(dir, `gen-${ts}.png`);
-          } else if (!isAbsolute(outPath)) {
-            throw new Error("output_path must be an absolute path");
-          } else if (!existsSync(dirname(outPath))) {
-            mkdirSync(dirname(outPath), { recursive: true });
-          }
-
-          writeFileSync(outPath, buf);
-          const dataUrl = `data:image/png;base64,${buf.toString("base64")}`;
-          return {
-            title: "Generated image",
-            output: `Image generated and saved to: ${outPath}`,
-            attachments: [
-              {
-                type: "file",
-                mime: "image/png",
-                url: dataUrl,
-                filename: outPath.split(/[\\/]/).pop(),
-              },
-            ],
-          };
         },
       }),
     },
