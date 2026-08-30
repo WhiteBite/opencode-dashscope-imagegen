@@ -1,11 +1,14 @@
 {
   "name": "opencode-dashscope-imagegen",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)",
   "type": "module",
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
     "dist",
@@ -13,7 +16,7 @@
   ],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "bun build src/index.ts --target node --format esm --outdir dist"
+    "build": "tsc"
   },
   "keywords": [
     "opencode",
@@ -49,7 +52,8 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
     "@opencode-ai/plugin": "^1.18.19"

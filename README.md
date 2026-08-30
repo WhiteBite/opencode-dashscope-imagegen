@@ -60,7 +60,7 @@ dependencies once (`@opencode-ai/plugin` must resolve from the plugin's own dire
 
 ```bash
 npm install
-npm run build   # bun build → dist/index.js
+npm run build   # tsc → dist/ (js + d.ts)
 ```
 
 ## Usage
