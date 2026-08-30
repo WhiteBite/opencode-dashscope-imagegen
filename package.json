@@ -1,7 +1,7 @@
 {
   "name": "opencode-dashscope-imagegen",
-  "version": "0.1.0",
-  "description": "OpenCode plugin: text-to-image generation via Alibaba DashScope (qwen-image / wan models). Adds an image_generate tool.",
+  "version": "0.1.1",
+  "description": "OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)",
   "type": "module",
   "main": "dist/index.js",
   "exports": {
@@ -17,18 +17,45 @@
   },
   "keywords": [
     "opencode",
+    "opencode-plugin",
+    "opencode-ai",
     "plugin",
     "dashscope",
+    "alibaba",
+    "aliyun",
+    "bailian",
     "qwen",
+    "qwen-image",
+    "wan",
     "image-generation",
-    "text-to-image"
+    "text-to-image",
+    "image",
+    "imagegen",
+    "ai",
+    "ai-image",
+    "typescript"
   ],
   "license": "MIT",
+  "author": "WhiteBite",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WhiteBite/opencode-dashscope-imagegen.git"
+  },
+  "homepage": "https://github.com/WhiteBite/opencode-dashscope-imagegen#readme",
+  "bugs": {
+    "url": "https://github.com/WhiteBite/opencode-dashscope-imagegen/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@opencode-ai/plugin": "latest"
+    "@opencode-ai/plugin": "^1.18.19"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
   }
 }
