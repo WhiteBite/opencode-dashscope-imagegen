@@ -14,6 +14,10 @@ Add to your `opencode.json` (local path or npm spec once published):
 }
 ```
 
+When referencing the plugin by **local path**, run `npm install` inside this repo once —
+the plugin imports `@opencode-ai/plugin`, which must resolve from the plugin's own
+directory (OpenCode does not provide it for out-of-tree plugins).
+
 ## Auth
 
 Key resolution order:
