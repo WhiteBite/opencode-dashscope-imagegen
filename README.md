@@ -1,52 +1,94 @@
 # opencode-dashscope-imagegen
 
-[OpenCode](https://opencode.ai) plugin: text-to-image generation via **Alibaba DashScope**
-(`qwen-image-2.0`, `qwen-image-3.0`, `wan2.7-image` and compatible models).
-Adds an `image_generate` tool that saves the PNG to disk and returns its path.
+> Text-to-image generation for [OpenCode](https://opencode.ai) via **Alibaba DashScope** —
+> `qwen-image-2.0`, `qwen-image-3.0` and `wan2.7-image` exposed as an `image_generate` tool
+> your coding agent can call.
 
-## Install
+[![npm version](https://img.shields.io/npm/v/opencode-dashscope-imagegen)](https://www.npmjs.com/package/opencode-dashscope-imagegen)
+[![npm downloads](https://img.shields.io/npm/dm/opencode-dashscope-imagegen)](https://www.npmjs.com/package/opencode-dashscope-imagegen)
+[![license](https://img.shields.io/npm/l/opencode-dashscope-imagegen)](LICENSE)
+[![OpenCode plugin](https://img.shields.io/badge/OpenCode-plugin-4f46e5)](https://opencode.ai/docs/plugins/)
 
-Add to your `opencode.json` (local path or npm spec once published):
+![Example output: generated with qwen-image-2.0](docs/example.png)
+
+## Highlights
+
+- Adds a single `image_generate` tool to any OpenCode agent — no extra server, no MCP setup.
+- Uses the native DashScope multimodal-generation endpoint (the OpenAI-compatible
+  `/v1/images/generations` route is not served by DashScope).
+- Saves the PNG to disk and returns the absolute path, so vision models
+  (`qwen3-vl-plus`, `kimi-k3`, …) can inspect the result via normal image attachments.
+- Works with any DashScope text-to-image model, including the Wan series (`wan2.7-image`).
+
+## Supported models
+
+| Model | Notes |
+|-------|-------|
+| `qwen-image-2.0` (default) | fast general-purpose text-to-image |
+| `qwen-image-3.0` | newer Qwen-Image generation |
+| `wan2.7-image` | Wan (Tongyi Wanxiang) image models |
+
+## Prerequisites
+
+- [OpenCode](https://opencode.ai) installed.
+- A DashScope API key from [Alibaba Cloud Model Studio](https://dashscope.console.aliyun.com/)
+  (Bailian console). Key resolution order:
+  1. `DASHSCOPE_IMAGEGEN_API_KEY` env
+  2. `DASHSCOPE_API_KEY` env
+  3. `apiKey` of any `dashscope*` provider in your `opencode.json`
+
+## Installation
+
+Add the npm package name to your `opencode.json` — OpenCode installs it on next launch:
 
 ```json
 {
-  "plugin": ["D:/Sources/WhiteBite/opencode-dashscope-imagegen/src/index.ts"]
+  "plugin": ["opencode-dashscope-imagegen"]
 }
 ```
 
-When referencing the plugin by **local path**, run `npm install` inside this repo once —
-the plugin imports `@opencode-ai/plugin`, which must resolve from the plugin's own
-directory (OpenCode does not provide it for out-of-tree plugins).
+### Developing locally
 
-## Auth
+To run from a checkout instead of npm, reference the plugin directory and install its
+dependencies once (`@opencode-ai/plugin` must resolve from the plugin's own directory):
 
-Key resolution order:
+```json
+{
+  "plugin": ["file:///path/to/opencode-dashscope-imagegen"]
+}
+```
 
-1. `DASHSCOPE_IMAGEGEN_API_KEY` env
-2. `DASHSCOPE_API_KEY` env
-3. `apiKey` of any `dashscope*` provider in your `opencode.json`
+```bash
+npm install
+npm run build   # bun build → dist/index.js
+```
 
 ## Usage
 
-The agent gets a tool:
+Just ask your agent: *"generate an image of a lighthouse at dusk"* — it will call the tool:
 
 | Arg | Default | Description |
 |-----|---------|-------------|
 | `prompt` | required | image description |
-| `model` | `qwen-image-2.0` | any DashScope text2image model |
-| `size` | `1024*1024` | `W*H` (star, not `x`) |
-| `output_path` | auto | absolute path; default `~/.config/opencode/gen-images/gen-<ts>.png` |
+| `model` | `qwen-image-2.0` | any DashScope text-to-image model |
+| `size` | `1024*1024` | `W*H` with a star, e.g. `1280*720` |
+| `output_path` | auto | absolute path; default `<config>/gen-images/gen-<ts>.png` |
 
-Output dir override: `DASHSCOPE_IMAGEGEN_DIR` env.
+Output directory override: `DASHSCOPE_IMAGEGEN_DIR` env.
 
-## Notes
+## Troubleshooting
 
-- Uses the native DashScope endpoint
-  `POST /api/v1/services/aigc/multimodal-generation/generation`
-  (the OpenAI-compatible `/v1/images/generations` is not served by DashScope).
-- Vision models (kimi-k3, qwen3.8-max, qwen-vl-*) can then inspect the saved PNG
-  via normal image attachments.
+- **`InvalidApiKey` / 401** — no key found; check the resolution order above.
+- **Tool not appearing** — restart OpenCode after editing `opencode.json`; plugins load at startup.
+- **`size` rejected** — use `W*H` with `*` (star), not `x`: `1024*1024`.
+- **Model not supported** — the key's account must have the model enabled in Model Studio.
+
+## Related
+
+- [OpenCode plugin docs](https://opencode.ai/docs/plugins/)
+- [OpenCode ecosystem](https://opencode.ai/docs/ecosystem/)
+- [awesome-opencode](https://github.com/awesome-opencode/awesome-opencode)
 
 ## License
 
-MIT
+[MIT](LICENSE)
