@@ -1,14 +1,25 @@
-import type { Plugin } from "@opencode-ai/plugin";
+import type { Plugin, PluginInput } from "@opencode-ai/plugin";
 import { tool } from "@opencode-ai/plugin";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join, isAbsolute, dirname } from "node:path";
 
-const LOG = "[dashscope-imagegen]";
+const SERVICE = "dashscope-imagegen";
 const ENDPOINT =
   "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation";
 const DEFAULT_MODEL = "qwen-image-2.0";
 
-console.log(`${LOG} plugin module loaded (pid=${process.pid}, platform=${process.platform})`);
+/** Structured logger via the OpenCode SDK; never throws. */
+function makeLog(client: PluginInput["client"]) {
+  return (level: "info" | "error", message: string, extra?: Record<string, unknown>) => {
+    try {
+      void client.app
+        .log({ body: { service: SERVICE, level, message, extra } })
+        .catch(() => {});
+    } catch {
+      // logging must never break generation
+    }
+  };
+}
 
 function configDir(): string {
   return (
@@ -130,8 +141,9 @@ async function runGenerate(args: GenArgs) {
   };
 }
 
-const DashscopeImagegenPlugin: Plugin = async () => {
-  console.log(`${LOG} plugin() invoked, registering image_generate tool`);
+export const DashscopeImagegenPlugin: Plugin = async ({ client }) => {
+  const log = makeLog(client);
+  log("info", "plugin initialized, registering image_generate tool");
   return {
     tool: {
       image_generate: tool({
@@ -153,13 +165,17 @@ const DashscopeImagegenPlugin: Plugin = async () => {
             .describe("Absolute output file path (default: auto-named in gen-images dir)"),
         },
         async execute(args) {
-          console.log(
-            `${LOG} execute: prompt="${args.prompt.slice(0, 80)}" model=${args.model ?? DEFAULT_MODEL} size=${args.size ?? "1024*1024"}`,
-          );
+          log("info", "image_generate called", {
+            prompt: args.prompt.slice(0, 80),
+            model: args.model ?? DEFAULT_MODEL,
+            size: args.size ?? "1024*1024",
+          });
           try {
             return await runGenerate(args);
           } catch (e) {
-            console.error(`${LOG} execute failed:`, e);
+            log("error", "image_generate failed", {
+              error: e instanceof Error ? e.message : String(e),
+            });
             throw e;
           }
         },
@@ -167,5 +183,3 @@ const DashscopeImagegenPlugin: Plugin = async () => {
     },
   };
 };
-
-export default DashscopeImagegenPlugin;
