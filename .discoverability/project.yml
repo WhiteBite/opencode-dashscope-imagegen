@@ -1,0 +1,73 @@
+# .discoverability/project.yml
+# Single source of truth for this repository's discoverability metadata.
+# Consumed by: rdk audit / rdk fix / rdk github-sync / rdk npm-surface,
+# the repo-discoverability skill, and the rdk-audit GitHub Action.
+# Docs: https://github.com/WhiteBite/repo-aeo/blob/main/docs/configuration.md
+
+schema_version: 1   # config schema revision; rdk warns on any other value
+
+project:
+  name: "opencode-dashscope-imagegen"
+  one_liner: "OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)"   # 1 sentence, shown as the GitHub description
+  description: "OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)"
+  category: "library"   # library | app | template | research | tool | dataset | mcp-server
+  copyright_holder: "WhiteBite"   # name on the LICENSE copyright line; seeded from the git owner
+
+audiences: []
+
+use_cases: []   # 3-7 concrete jobs this project does
+
+keywords:
+  github_topics:
+    - "open-source"
+    - "developer-tools"
+    - "library"
+    - "opencode"
+    - "dashscope"
+    - "imagegen"
+    - "opencode-plugin"
+    - "opencode-ai"
+    - "plugin"
+    - "alibaba"
+    - "aliyun"
+    - "bailian"   # 8-20 terms, lowercase with hyphens
+  npm_keywords:
+    - "opencode"
+    - "opencode-plugin"
+    - "opencode-ai"
+    - "plugin"
+    - "dashscope"
+    - "alibaba"
+    - "aliyun"
+    - "bailian"
+    - "qwen"
+    - "qwen-image"
+    - "wan"
+    - "image-generation"
+    - "text-to-image"
+    - "image"
+    - "imagegen"   # 5-15 terms for package.json keywords
+
+links:
+  homepage: "https://github.com/WhiteBite/opencode-dashscope-imagegen#readme"
+  docs:
+  demo:
+  issues: "https://github.com/WhiteBite/opencode-dashscope-imagegen/issues"
+
+quickstart:
+  prerequisites:
+    - "Node.js >= 18"
+  install: "npm install opencode-dashscope-imagegen"
+  run:
+  test: "npm run test"
+
+artifacts:
+  has_npm_package: true
+  has_docs_site: false
+
+differentiators: []   # "why this repo, not the alternatives"
+
+safety:
+  allow_autofix: false          # lets the Action open autofix PRs
+  require_ack_for_publish: true
+  ack:   # optional override of the github-sync ACK string; empty keeps the default

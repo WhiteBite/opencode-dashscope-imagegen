@@ -1,0 +1,27 @@
+<!-- rdk:generated:start -->
+# opencode-dashscope-imagegen
+
+> OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)
+
+This file follows the llms.txt convention: a short, LLM-friendly index of the project.
+
+## Docs
+
+- [Homepage](https://github.com/WhiteBite/opencode-dashscope-imagegen#readme): project landing page
+- [Issues](https://github.com/WhiteBite/opencode-dashscope-imagegen/issues): roadmap and known gaps
+- [README.md](./README.md): install, run and test instructions
+
+## Key facts
+
+- Install: `npm install opencode-dashscope-imagegen`
+- Test: `npm run test`
+
+## Optional
+
+- [llms-full.txt](./llms-full.txt): the full documentation in a single file
+- [AGENTS.md](./AGENTS.md): instructions for coding agents
+<!-- rdk:generated:end -->
+
+## Hand-written notes
+
+<!-- Everything below the end marker is preserved by `rdk fix`. Put hand-written context here; the block above is regenerated from .discoverability/project.yml. -->

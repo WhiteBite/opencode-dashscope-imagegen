@@ -1,3 +1,14 @@
+<!-- rdk:generated:start -->
+# opencode-dashscope-imagegen — full documentation
+
+> OpenCode plugin that adds an image_generate tool for text-to-image generation with Alibaba DashScope models (qwen-image-2.0, qwen-image-3.0, wan2.7-image)
+
+This is the concatenated documentation intended for LLM grounding. Regenerate with `rdk fix`.
+
+---
+
+# README
+
 # opencode-dashscope-imagegen
 
 > Text-to-image generation for [OpenCode](https://opencode.ai) via **Alibaba DashScope** —
@@ -118,3 +129,8 @@ Output directory override: `DASHSCOPE_IMAGEGEN_DIR` env.
 ## Why choose this
 
 <!-- TODO: 2-4 differentiators, with numbers -->
+<!-- rdk:generated:end -->
+
+## Hand-written notes
+
+<!-- Everything below the end marker is preserved by `rdk fix`. Put hand-written context here; the block above is regenerated from .discoverability/project.yml. -->

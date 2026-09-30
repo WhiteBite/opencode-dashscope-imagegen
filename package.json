@@ -12,7 +12,10 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "llms.txt",
+    "llms-full.txt",
+    "AGENTS.md"
   ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
