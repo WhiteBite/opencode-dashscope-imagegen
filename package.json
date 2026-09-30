@@ -23,7 +23,9 @@
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "rdk:audit": "rdk audit",
+    "rdk:fix": "rdk fix"
   },
   "keywords": [
     "opencode",
@@ -70,6 +72,7 @@
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "8.47.0",
     "@typescript-eslint/parser": "8.47.0",
+    "@whitebite/rdk-cli": "^0.2.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "^5.1.3",

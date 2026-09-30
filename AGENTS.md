@@ -37,3 +37,9 @@ npm install opencode-dashscope-imagegen
 - **Do** keep `.discoverability/project.yml` in sync with `package.json`.
 - **Don't** bump versions, create tags, publish, force-push or delete files without explicit human confirmation.
 - **Don't** rewrite unrelated files while fixing a specific finding.
+
+## Discoverability (RDK)
+
+- `npm run rdk:audit` — Discoverability Score 0-100 and findings; read-only.
+- `npm run rdk:fix` — preview safe autofixes; `npm run rdk:fix -- --apply` writes them.
+- The rdk-audit workflow fails pull requests below `vars.RDK_MIN_SCORE`.
